@@ -1,0 +1,897 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+  <head>
+    <meta charset="UTF-8" />
+
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"
+    />
+
+    <title>الكرسي الذكي</title>
+
+    <!-- Cairo Font -->
+
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+
+    <link
+      href="https://fonts.googleapis.com/css2?family=Cairo:wght@200;300;400;500;600;700;800&display=swap"
+      rel="stylesheet"
+    />
+
+    <!-- Font Awesome -->
+
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"
+    />
+
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+        -webkit-tap-highlight-color: transparent;
+        scrollbar-width: none;
+      }
+
+      *::-webkit-scrollbar {
+        display: none;
+      }
+
+      html,
+      body {
+        width: 100%;
+        min-height: 100%;
+        background: #f4f7fb;
+        font-family: "Cairo", sans-serif;
+        overflow-x: hidden;
+        touch-action: manipulation;
+      }
+
+      body {
+        padding: 18px;
+      }
+
+      .app {
+        max-width: 500px;
+        margin: auto;
+        display: flex;
+        flex-direction: column;
+        gap: 20px;
+        padding-bottom: 40px;
+      }
+
+      /* HEADER */
+
+      .header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+      }
+
+      .title-box h1 {
+        font-size: 32px;
+        font-weight: 800;
+        color: #111827;
+      }
+
+      .title-box p {
+        margin-top: 6px;
+        color: #6b7280;
+        font-size: 14px;
+        font-weight: 600;
+        line-height: 1.6;
+      }
+
+      .online {
+        background: white;
+        padding: 12px 18px;
+        border-radius: 18px;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        color: #10b981;
+        font-weight: 800;
+        font-size: 14px;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+      }
+
+      /* NAV */
+
+      .nav {
+        display: flex;
+        gap: 12px;
+      }
+
+      .nav button {
+        flex: 1;
+        border: none;
+        background: white;
+        padding: 18px;
+        border-radius: 22px;
+        font-family: "Cairo", sans-serif;
+        font-size: 15px;
+        font-weight: 800;
+        cursor: pointer;
+        transition: 0.3s;
+        box-shadow: 0 10px 25px rgba(0, 0, 0, 0.05);
+      }
+
+      .active-page {
+        background: linear-gradient(135deg, #4f46e5, #7c3aed) !important;
+        color: white !important;
+      }
+
+      /* STATUS */
+
+      .status-card {
+        background: linear-gradient(135deg, #4f46e5, #7c3aed);
+        border-radius: 34px;
+        padding: 28px;
+        color: white;
+        position: relative;
+        overflow: hidden;
+        box-shadow: 0 18px 45px rgba(79, 70, 229, 0.3);
+      }
+
+      .status-card::before {
+        content: "";
+        position: absolute;
+        width: 220px;
+        height: 220px;
+        border-radius: 50%;
+        background: rgba(255, 255, 255, 0.08);
+        top: -100px;
+        left: -70px;
+      }
+
+      .status-top {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        position: relative;
+        z-index: 2;
+      }
+
+      .status-label {
+        font-size: 15px;
+        font-weight: 700;
+        opacity: 0.9;
+      }
+
+      .status-icon {
+        width: 78px;
+        height: 78px;
+        border-radius: 26px;
+        background: rgba(255, 255, 255, 0.15);
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        font-size: 30px;
+        backdrop-filter: blur(10px);
+      }
+
+      .status-text {
+        margin-top: 34px;
+        font-size: 34px;
+        font-weight: 800;
+        line-height: 1.7;
+        min-height: 110px;
+        position: relative;
+        z-index: 2;
+      }
+
+      .speak-btn {
+        margin-top: 24px;
+        width: 100%;
+        border: none;
+        background: rgba(255, 255, 255, 0.14);
+        color: white;
+        padding: 18px;
+        border-radius: 22px;
+        font-family: "Cairo", sans-serif;
+        font-size: 15px;
+        font-weight: 800;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 10px;
+        cursor: pointer;
+        backdrop-filter: blur(10px);
+        position: relative;
+        z-index: 2;
+      }
+
+      /* STATS */
+
+      .stats {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 16px;
+      }
+
+      .stat-card {
+        background: white;
+        border-radius: 28px;
+        padding: 24px;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+      }
+
+      .stat-icon {
+        width: 58px;
+        height: 58px;
+        border-radius: 18px;
+        background: #eef2ff;
+        color: #4f46e5;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 22px;
+        margin-bottom: 16px;
+      }
+
+      .stat-title {
+        color: #6b7280;
+        font-size: 14px;
+        font-weight: 700;
+      }
+
+      .stat-value {
+        margin-top: 12px;
+        font-size: 34px;
+        font-weight: 800;
+        color: #111827;
+      }
+
+      /* BUTTONS */
+
+      .buttons {
+        display: flex;
+        gap: 14px;
+      }
+
+      button {
+        border: none;
+        outline: none;
+        font-family: "Cairo", sans-serif;
+      }
+
+      .start-btn,
+      .end-btn {
+        flex: 1;
+        padding: 20px;
+        border-radius: 24px;
+        font-size: 16px;
+        font-weight: 800;
+        cursor: pointer;
+        transition: 0.3s;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        gap: 10px;
+      }
+
+      .start-btn {
+        background: linear-gradient(135deg, #4f46e5, #7c3aed);
+        color: white;
+        box-shadow: 0 12px 30px rgba(79, 70, 229, 0.25);
+      }
+
+      .end-btn {
+        background: white;
+        color: #ef4444;
+        box-shadow: 0 10px 25px rgba(0, 0, 0, 0.05);
+      }
+
+      button:disabled {
+        opacity: 0.5;
+        cursor: not-allowed;
+      }
+
+      /* HISTORY */
+
+      .history {
+        background: white;
+        border-radius: 30px;
+        padding: 24px;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+      }
+
+      .history-title {
+        font-size: 24px;
+        font-weight: 800;
+        color: #111827;
+        margin-bottom: 18px;
+      }
+
+      .history-item {
+        display: flex;
+        align-items: center;
+        gap: 16px;
+        padding: 18px 0;
+        border-bottom: 1px solid #f3f4f6;
+      }
+
+      .history-item:last-child {
+        border: none;
+      }
+
+      .history-icon {
+        width: 56px;
+        height: 56px;
+        border-radius: 18px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        font-size: 20px;
+        flex-shrink: 0;
+      }
+
+      .good-bg {
+        background: #ecfdf5;
+        color: #10b981;
+      }
+
+      .bad-bg {
+        background: #fef2f2;
+        color: #ef4444;
+      }
+
+      .neutral-bg {
+        background: #fff7ed;
+        color: #f59e0b;
+      }
+
+      .history-content {
+        flex: 1;
+      }
+
+      .history-status {
+        font-size: 15px;
+        font-weight: 800;
+        color: #111827;
+        line-height: 1.7;
+      }
+
+      .history-time {
+        margin-top: 6px;
+        color: #9ca3af;
+        font-size: 13px;
+        font-weight: 600;
+      }
+
+      .hidden {
+        display: none;
+      }
+    </style>
+  </head>
+
+  <body>
+    <div class="app">
+      <!-- HEADER -->
+
+      <div class="header">
+        <div class="title-box">
+          <h1>الكرسي الذكي</h1>
+
+          <p>مراقبة وضعية الجلوس في الوقت الحقيقي</p>
+        </div>
+
+        <div class="online">
+          <i class="fa-solid fa-wifi"></i>
+
+          متصل
+        </div>
+      </div>
+
+      <!-- NAVIGATION -->
+
+      <div class="nav">
+        <button id="monitorBtn" class="active-page">المراقبة</button>
+
+        <button id="sessionsBtn">الجلسات</button>
+      </div>
+
+      <!-- MONITOR PAGE -->
+
+      <div id="monitorPage">
+        <!-- STATUS -->
+
+        <div class="status-card">
+          <div class="status-top">
+            <div class="status-label">الحالة الحالية</div>
+
+            <div class="status-icon" id="statusIcon">
+              <i class="fa-solid fa-chair"></i>
+            </div>
+          </div>
+
+          <div class="status-text" id="currentStatus">جاري الانتظار...</div>
+
+          <!-- SPEAK AGAIN -->
+
+          <button class="speak-btn" onclick="replaySpeech()">
+            <i class="fa-solid fa-volume-high"></i>
+
+            إعادة تشغيل الصوت
+          </button>
+        </div>
+
+        <!-- STATS -->
+
+        <div class="stats">
+          <div class="stat-card">
+            <div class="stat-icon">
+              <i class="fa-solid fa-clock"></i>
+            </div>
+
+            <div class="stat-title">مدة الجلسة</div>
+
+            <div class="stat-value" id="sessionTime">00:00</div>
+          </div>
+
+          <div class="stat-card">
+            <div class="stat-icon">
+              <i class="fa-solid fa-check"></i>
+            </div>
+
+            <div class="stat-title">الوضعيات الصحيحة</div>
+
+            <div class="stat-value" id="goodCount">0</div>
+          </div>
+        </div>
+
+        <!-- BUTTONS -->
+
+        <div class="buttons">
+          <button class="start-btn" id="startSession">
+            <i class="fa-solid fa-play"></i>
+
+            بدء الجلسة
+          </button>
+
+          <button class="end-btn" id="endSession">
+            <i class="fa-solid fa-stop"></i>
+
+            إنهاء الجلسة
+          </button>
+        </div>
+
+        <!-- LIVE EVENTS -->
+
+        <div class="history">
+          <div class="history-title">الأحداث المباشرة</div>
+
+          <div id="historyContainer"></div>
+        </div>
+      </div>
+
+      <!-- SESSIONS PAGE -->
+
+      <div id="sessionsPage" class="hidden">
+        <div class="history">
+          <div class="history-title">سجل الجلسات</div>
+
+          <div id="sessionsContainer"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- FIREBASE -->
+
+    <script type="module">
+      import { initializeApp } from "https://www.gstatic.com/firebasejs/12.13.0/firebase-app.js";
+
+      import {
+        getDatabase,
+        ref,
+        onValue,
+        push,
+        set,
+      } from "https://www.gstatic.com/firebasejs/12.13.0/firebase-database.js";
+
+      /* FIREBASE */
+
+      const firebaseConfig = {
+        apiKey: "AIzaSyCi59TK6tMGHsxgnOCTkjDsRqiilgitqUE",
+        authDomain: "smart-chair-83815.firebaseapp.com",
+        databaseURL: "https://smart-chair-83815-default-rtdb.firebaseio.com",
+        projectId: "smart-chair-83815",
+        storageBucket: "smart-chair-83815.firebasestorage.app",
+        messagingSenderId: "221673400337",
+        appId: "1:221673400337:web:7c6b8d8053bba8808529b0",
+        measurementId: "G-ZFHGH5Q0XN",
+      };
+      const app = initializeApp(firebaseConfig);
+
+      const db = getDatabase(app);
+
+      /* REFERENCES */
+
+      const statusRef = ref(db, "Chair/Status");
+
+      const sessionsRef = ref(db, "Sessions");
+
+      /* ELEMENTS */
+
+      const currentStatus = document.getElementById("currentStatus");
+
+      const historyContainer = document.getElementById("historyContainer");
+
+      const sessionsContainer = document.getElementById("sessionsContainer");
+
+      const sessionTime = document.getElementById("sessionTime");
+
+      const goodCount = document.getElementById("goodCount");
+
+      const statusIcon = document.getElementById("statusIcon");
+
+      const startBtn = document.getElementById("startSession");
+
+      const endBtn = document.getElementById("endSession");
+
+      /* VARIABLES */
+
+      let previousState = "";
+
+      let currentSpeech = "";
+
+      let sessionRunning = false;
+
+      let seconds = 0;
+
+      let timer = null;
+
+      let goodPostures = 0;
+
+      let sessionStart = null;
+
+      /* INITIAL STATE */
+
+      endBtn.disabled = true;
+
+      /* SEND TO APP INVENTOR */
+
+      function sendSpeechToApp(text) {
+        if (window.AppInventor) {
+          window.AppInventor.setWebViewString(text);
+        }
+      }
+
+      /* WEB SPEECH */
+
+      function speakArabic(text) {
+        currentSpeech = text;
+
+        /* WEBVIEW SPEECH */
+
+        sendSpeechToApp(text);
+
+        /* NORMAL WEB SPEECH */
+
+        if ("speechSynthesis" in window) {
+          speechSynthesis.cancel();
+
+          const speech = new SpeechSynthesisUtterance(text);
+
+          speech.lang = "ar-SA";
+
+          speech.rate = 0.9;
+
+          speech.pitch = 1;
+
+          speech.volume = 1;
+
+          speechSynthesis.speak(speech);
+        }
+      }
+
+      /* REPLAY SPEECH */
+
+      window.replaySpeech = function () {
+        if (currentSpeech) {
+          speakArabic(currentSpeech);
+        }
+      };
+
+      /* FORMAT TIME */
+
+      function formatTime(sec) {
+        const mins = String(Math.floor(sec / 60)).padStart(2, "0");
+
+        const secs = String(sec % 60).padStart(2, "0");
+
+        return `${mins}:${secs}`;
+      }
+
+      /* TRANSLATE STATE */
+
+      function translateState(state) {
+        if (state.includes("Perfect")) {
+          return "وضعية جلوس صحيحة";
+        }
+
+        if (state.includes("Unbalanced")) {
+          return "الرجاء تعديل توازن الجلوس";
+        }
+
+        if (state.includes("Lean")) {
+          return "الرجاء إسناد الظهر بشكل صحيح";
+        }
+
+        if (state.includes("Adjust")) {
+          return "الرجاء تعديل زاوية الجلوس";
+        }
+
+        if (state.includes("Empty")) {
+          return "الكرسي فارغ";
+        }
+
+        return state;
+      }
+
+      /* UPDATE ICON */
+
+      function updateStatusIcon(state) {
+        let icon = "fa-chair";
+
+        if (state.includes("Perfect")) {
+          icon = "fa-check";
+        } else if (state.includes("Fixing") || state.includes("Adjust")) {
+          icon = "fa-triangle-exclamation";
+        }
+
+        statusIcon.innerHTML = `
+  
+    <i class="fa-solid ${icon}"></i>
+  
+  `;
+      }
+
+      /* ADD HISTORY */
+
+      function addHistory(state) {
+        const item = document.createElement("div");
+
+        item.className = "history-item";
+
+        let icon = "fa-circle-info";
+
+        let className = "neutral-bg";
+
+        if (state.includes("Perfect")) {
+          icon = "fa-check";
+
+          className = "good-bg";
+        } else if (state.includes("Fixing") || state.includes("Adjust")) {
+          icon = "fa-triangle-exclamation";
+
+          className = "bad-bg";
+        }
+
+        const now = new Date();
+
+        item.innerHTML = `
+  
+    <div class="history-icon ${className}">
+
+      <i class="fa-solid ${icon}"></i>
+
+    </div>
+
+    <div class="history-content">
+
+      <div class="history-status">
+
+        ${translateState(state)}
+
+      </div>
+
+      <div class="history-time">
+
+        ${now.toLocaleTimeString("ar-EG")}
+
+      </div>
+
+    </div>
+  
+  `;
+
+        historyContainer.prepend(item);
+
+        if (historyContainer.children.length > 20) {
+          historyContainer.removeChild(historyContainer.lastChild);
+        }
+      }
+
+      /* START SESSION */
+
+      startBtn.onclick = () => {
+        if (sessionRunning) return;
+
+        sessionRunning = true;
+
+        seconds = 0;
+
+        goodPostures = 0;
+
+        sessionStart = new Date().toLocaleString("ar-EG");
+
+        sessionTime.innerText = "00:00";
+
+        goodCount.innerText = "0";
+
+        startBtn.disabled = true;
+
+        endBtn.disabled = false;
+
+        timer = setInterval(() => {
+          seconds++;
+
+          sessionTime.innerText = formatTime(seconds);
+        }, 1000);
+
+        speakArabic("تم بدء الجلسة");
+      };
+
+      /* END SESSION */
+
+      endBtn.onclick = () => {
+        if (!sessionRunning) return;
+
+        sessionRunning = false;
+
+        clearInterval(timer);
+
+        const sessionData = {
+          duration: formatTime(seconds),
+
+          durationSeconds: seconds,
+
+          goodPostures: goodPostures,
+
+          startedAt: sessionStart,
+
+          endedAt: new Date().toLocaleString("ar-EG"),
+        };
+
+        const newSession = push(sessionsRef);
+
+        set(newSession, sessionData);
+
+        startBtn.disabled = false;
+
+        endBtn.disabled = true;
+
+        speakArabic("تم إنهاء الجلسة");
+      };
+
+      /* LIVE STATUS */
+
+      onValue(statusRef, (snapshot) => {
+        const state = snapshot.val();
+
+        if (!state) return;
+
+        currentStatus.innerText = translateState(state);
+
+        if (previousState !== state) {
+          addHistory(state);
+
+          speakArabic(translateState(state));
+
+          if (sessionRunning && state.includes("Perfect")) {
+            goodPostures++;
+
+            goodCount.innerText = goodPostures;
+          }
+
+          previousState = state;
+        }
+
+        updateStatusIcon(state);
+      });
+
+      /* SESSIONS */
+
+      onValue(sessionsRef, (snapshot) => {
+        sessionsContainer.innerHTML = "";
+
+        const data = snapshot.val();
+
+        if (!data) return;
+
+        Object.values(data)
+          .reverse()
+          .forEach((session) => {
+            const item = document.createElement("div");
+
+            item.className = "history-item";
+
+            item.innerHTML = `
+    
+      <div class="history-icon good-bg">
+
+        <i class="fa-solid fa-laptop-medical"></i>
+
+      </div>
+
+      <div class="history-content">
+
+        <div class="history-status">
+
+          مدة الجلسة:
+          ${session.duration}
+
+        </div>
+
+        <div class="history-time">
+
+          الوضعيات الصحيحة:
+          ${session.goodPostures}
+
+        </div>
+
+        <div class="history-time">
+
+          ${session.endedAt}
+
+        </div>
+
+      </div>
+    
+    `;
+
+            sessionsContainer.appendChild(item);
+          });
+      });
+
+      /* NAVIGATION */
+
+      const monitorBtn = document.getElementById("monitorBtn");
+
+      const sessionsBtn = document.getElementById("sessionsBtn");
+
+      const monitorPage = document.getElementById("monitorPage");
+
+      const sessionsPage = document.getElementById("sessionsPage");
+
+      monitorBtn.onclick = () => {
+        monitorPage.classList.remove("hidden");
+
+        sessionsPage.classList.add("hidden");
+
+        monitorBtn.classList.add("active-page");
+
+        sessionsBtn.classList.remove("active-page");
+      };
+
+      sessionsBtn.onclick = () => {
+        sessionsPage.classList.remove("hidden");
+
+        monitorPage.classList.add("hidden");
+
+        sessionsBtn.classList.add("active-page");
+
+        monitorBtn.classList.remove("active-page");
+      };
+
+      /* DISABLE ZOOM */
+
+      document.addEventListener("gesturestart", function (e) {
+        e.preventDefault();
+      });
+
+      document.addEventListener(
+        "dblclick",
+        function (e) {
+          e.preventDefault();
+        },
+        { passive: false },
+      );
+    </script>
+  </body>
+</html>
