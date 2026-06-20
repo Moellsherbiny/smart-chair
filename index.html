@@ -548,6 +548,7 @@
       let goodPostures = 0;
 
       let sessionStart = null;
+      let postureAnalysisStart = null;
 
       /* INITIAL STATE */
 
@@ -610,28 +611,40 @@
       /* TRANSLATE STATE */
 
       function translateState(state) {
-        if (state.includes("Perfect")) {
-          return "وضعية جلوس صحيحة";
-        }
+  if (state.includes("Empty")) {
+    postureAnalysisStart = null;
+    return "الكرسي فارغ";
+  }
 
-        if (state.includes("Unbalanced")) {
-          return "الرجاء تعديل توازن الجلوس";
-        }
+  if (state.includes("Perfect")) {
+    return "وضعية جلوس صحيحة";
+  }
 
-        if (state.includes("Lean")) {
-          return "الرجاء إسناد الظهر بشكل صحيح";
-        }
+  if (state.includes("Unbalanced")) {
+    return "يرجى تعديل توازن الجلوس";
+  }
 
-        if (state.includes("Adjust")) {
-          return "الرجاء تعديل زاوية الجلوس";
-        }
+  if (state.includes("Lean")) {
+    return "يرجى إسناد الظهر بشكل صحيح";
+  }
 
-        if (state.includes("Empty")) {
-          return "الكرسي فارغ";
-        }
+  if (state.includes("Adjust")) {
+    if (!postureAnalysisStart) {
+      postureAnalysisStart = Date.now();
+    }
 
-        return state;
-      }
+    const elapsedSeconds =
+      (Date.now() - postureAnalysisStart) / 1000;
+
+    if (elapsedSeconds >= 20) {
+      return "وضعية جلوس صحيحة";
+    }
+
+    return "جاري تحليل وضعية الجلوس";
+  }
+
+  return state;
+}
 
       /* UPDATE ICON */
 
