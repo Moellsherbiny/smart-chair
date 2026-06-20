@@ -548,7 +548,7 @@
       let goodPostures = 0;
 
       let sessionStart = null;
-      let postureAnalysisStart = null;
+      let postureTimer = null;
 
       /* INITIAL STATE */
 
@@ -611,40 +611,28 @@
       /* TRANSLATE STATE */
 
       function translateState(state) {
-  if (state.includes("Empty")) {
-    postureAnalysisStart = null;
-    return "الكرسي فارغ";
-  }
+        if (state.includes("Perfect")) {
+          return "وضعية جلوس صحيحة";
+        }
 
-  if (state.includes("Perfect")) {
-    return "وضعية جلوس صحيحة";
-  }
+        if (state.includes("Unbalanced")) {
+          return "الرجاء تعديل توازن الجلوس";
+        }
 
-  if (state.includes("Unbalanced")) {
-    return "يرجى تعديل توازن الجلوس";
-  }
+        if (state.includes("Lean")) {
+          return "الرجاء إسناد الظهر بشكل صحيح";
+        }
 
-  if (state.includes("Lean")) {
-    return "يرجى إسناد الظهر بشكل صحيح";
-  }
+        if (state.includes("Adjust")) {
+          return "جاري تحليل وضعية الجلوس";
+        }
 
-  if (state.includes("Adjust")) {
-    if (!postureAnalysisStart) {
-      postureAnalysisStart = Date.now();
-    }
+        if (state.includes("Empty")) {
+          return "الكرسي فارغ";
+        }
 
-    const elapsedSeconds =
-      (Date.now() - postureAnalysisStart) / 1000;
-
-    if (elapsedSeconds >= 20) {
-      return "وضعية جلوس صحيحة";
-    }
-
-    return "جاري تحليل وضعية الجلوس";
-  }
-
-  return state;
-}
+        return state;
+      }
 
       /* UPDATE ICON */
 
@@ -789,25 +777,38 @@
 
         if (!state) return;
 
-        currentStatus.innerText = translateState(state);
+        if (state.includes("Adjust")) {
+          currentStatus.innerText = "جاري تحليل وضعية الجلوس";
+
+          if (!postureTimer) {
+            postureTimer = setTimeout(() => {
+              currentStatus.innerText = "وضعية جلوس صحيحة";
+              speakArabic("وضعية جلوس صحيحة")
+              statusIcon.innerHTML = '<i class="fa-solid fa-check"></i>';
+
+              if (sessionRunning) {
+                goodPostures++;
+                goodCount.innerText = goodPostures;
+              }
+            }, 15000);
+          }
+        } else {
+          clearTimeout(postureTimer);
+          postureTimer = null;
+
+          currentStatus.innerText = translateState(state);
+
+          updateStatusIcon(state);
+        }
 
         if (previousState !== state) {
           addHistory(state);
 
           speakArabic(translateState(state));
 
-          if (sessionRunning && state.includes("Perfect")) {
-            goodPostures++;
-
-            goodCount.innerText = goodPostures;
-          }
-
           previousState = state;
         }
-
-        updateStatusIcon(state);
       });
-
       /* SESSIONS */
 
       onValue(sessionsRef, (snapshot) => {
