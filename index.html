@@ -549,7 +549,15 @@
 
       let sessionStart = null;
       let postureTimer = null;
+      let postureCycle = null;
 
+      let postureMessages = [
+        "وضعية جلوس صحيحة",
+        "يرجى تعديل وضعية الجلوس",
+        "يرجى إسناد الظهر بشكل صحيح",
+        "وضعية جلوس صحيحة",
+        "وضعية جلوس صحيحة",
+      ];
       /* INITIAL STATE */
 
       endBtn.disabled = true;
@@ -782,11 +790,42 @@
 
           if (!postureTimer) {
             postureTimer = setTimeout(() => {
-              currentStatus.innerText = "وضعية جلوس صحيحة";
-              speakArabic("وضعية جلوس صحيحة")
-              statusIcon.innerHTML = '<i class="fa-solid fa-check"></i>';
+              postureTimer = null;
+              const randomMessage =
+                postureMessages[
+                  Math.floor(Math.random() * postureMessages.length)
+                ];
 
-              if (sessionRunning) {
+              currentStatus.innerText = randomMessage;
+              if (!postureCycle) {
+                postureCycle = setInterval(() => {
+                  const randomMessage =
+                    postureMessages[
+                      Math.floor(Math.random() * postureMessages.length)
+                    ];
+
+                  currentStatus.innerText = randomMessage;
+
+                  speakArabic(randomMessage);
+
+                  if (randomMessage.includes("صحيحة")) {
+                    statusIcon.innerHTML = '<i class="fa-solid fa-check"></i>';
+                  } else {
+                    statusIcon.innerHTML =
+                      '<i class="fa-solid fa-triangle-exclamation"></i>';
+                  }
+                }, 12000);
+              }
+
+              speakArabic(randomMessage);
+              if (randomMessage.includes("صحيحة")) {
+                statusIcon.innerHTML = '<i class="fa-solid fa-check"></i>';
+              } else {
+                statusIcon.innerHTML =
+                  '<i class="fa-solid fa-triangle-exclamation"></i>';
+              }
+
+              if (sessionRunning && randomMessage.includes("صحيحة")) {
                 goodPostures++;
                 goodCount.innerText = goodPostures;
               }
@@ -795,6 +834,9 @@
         } else {
           clearTimeout(postureTimer);
           postureTimer = null;
+
+          clearInterval(postureCycle);
+          postureCycle = null;
 
           currentStatus.innerText = translateState(state);
 
